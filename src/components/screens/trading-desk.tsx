@@ -464,7 +464,7 @@ export function TradingDesk() {
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-on-surface-variant">
-                  Displacement: {formatNum(assay.displacedVolume, 2)} cm³
+                  Density: {air > 0 ? formatNum(assay.density, 4) : "—"} (W_water / W_air)
                 </span>
               </div>
             </div>
@@ -477,18 +477,17 @@ export function TradingDesk() {
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-baseline gap-2">
-                    <span className="font-mono text-xs text-on-surface-variant uppercase">Specific Gravity:</span>
+                    <span className="font-mono text-xs text-on-surface-variant uppercase">Density:</span>
                     <span className="font-mono text-lg font-bold text-on-surface">
-                      {assay.valid ? formatNum(assay.specificGravity, 2) : "—"}
+                      {air > 0 ? formatNum(assay.density, 4) : "—"}
                     </span>
-                    <span className="font-mono text-xs text-on-surface-variant">g/cm³</span>
                   </div>
                   <span className={`text-xs font-medium ${densityMatch ? "text-tertiary" : "text-primary-dark"}`}>
-                    {!assay.valid
-                      ? "W_air must exceed W_water"
+                    {!air
+                      ? "Enter air and water weights"
                       : densityMatch
-                        ? "99.8% Density Tolerance Match"
-                        : "Outside 24K density band"}
+                        ? "W_water / W_air · 24K density match"
+                        : "W_water / W_air"}
                   </span>
                 </div>
               </div>

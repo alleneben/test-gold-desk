@@ -52,6 +52,7 @@ export function hydrostaticValuation(
   const valid = wAir > 0 && wWater >= 0 && wAir > wWater;
   const displacedVolume = valid ? wAir - wWater : 0;
   const specificGravity = valid ? wAir / displacedVolume : 0;
+  const density = wAir > 0 ? wWater / wAir : 0;
   const row = valid ? matchScheduleRow(specificGravity, rows) : null;
   const band = row
     ? { label: row.grade, buy: row.walkin, sell: row.sell, vip: row.vip }
@@ -61,6 +62,7 @@ export function hydrostaticValuation(
   return {
     displacedVolume,
     specificGravity,
+    density,
     karatLabel: band.label,
     matchedGrade: row?.grade ?? null,
     ratePerGram,
