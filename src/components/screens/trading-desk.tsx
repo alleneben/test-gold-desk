@@ -13,7 +13,7 @@ import {
   type TradeDirection,
 } from "@/lib/assay";
 import { formatDensityRange } from "@/lib/price-schedule";
-import { VIP_ACCOUNTS, findVipAccount, type VipAccount } from "@/lib/counterparties";
+import { findVipAccount, type VipAccount } from "@/lib/counterparties";
 
 type ClientType = "walkin" | "loyal";
 type Disbursement = "sepa" | "cash" | "cheque";
@@ -85,13 +85,13 @@ const LEDGER = [
 export function TradingDesk() {
   const { schedule } = usePriceSchedule();
   const [direction, setDirection] = useState<TradeDirection>("BUY");
-  const [clientType, setClientType] = useState<ClientType>("loyal");
-  const [clientName, setClientName] = useState(VIP_ACCOUNTS[0].name);
-  const [custodyRef, setCustodyRef] = useState(VIP_ACCOUNTS[0].account);
-  const [phone, setPhone] = useState(VIP_ACCOUNTS[0].phone);
-  const [selectedVip, setSelectedVip] = useState<VipAccount | null>(VIP_ACCOUNTS[0]);
-  const [wAir, setWAir] = useState("254.80");
-  const [wWater, setWWater] = useState("241.60");
+  const [clientType, setClientType] = useState<ClientType>("walkin");
+  const [clientName, setClientName] = useState("");
+  const [custodyRef, setCustodyRef] = useState("");
+  const [phone, setPhone] = useState("");
+  const [selectedVip, setSelectedVip] = useState<VipAccount | null>(null);
+  const [wAir, setWAir] = useState("");
+  const [wWater, setWWater] = useState("");
   const [disbursement, setDisbursement] = useState<Disbursement>("sepa");
   const [authorized, setAuthorized] = useState(false);
   const [ledgerFilter, setLedgerFilter] = useState<LedgerFilter>("all");
@@ -133,7 +133,9 @@ export function TradingDesk() {
 
   function chooseLoyal() {
     setClientType("loyal");
-    applyVip(findVipAccount(clientName) ?? VIP_ACCOUNTS[0]);
+    const vip = findVipAccount(clientName);
+    if (vip) applyVip(vip);
+    else setSelectedVip(null);
   }
 
   function loadSlip(row: (typeof LEDGER)[number]) {
@@ -430,6 +432,7 @@ export function TradingDesk() {
                     min="0"
                     step="0.01"
                     type="text"
+                    placeholder="Enter grams"
                     value={wAir}
                     onChange={(event) => setWAir(event.target.value)}
                   />
@@ -438,7 +441,7 @@ export function TradingDesk() {
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-on-surface-variant">
-                  ~{formatNum(troyOz, 4)} Troy Ounces (ozt)
+                  {air > 0 ? `~${formatNum(troyOz, 4)} Troy Ounces (ozt)` : "Troy ounces appear after air weight"}
                 </span>
               </div>
               <div className="flex flex-col gap-1.5">
@@ -456,6 +459,7 @@ export function TradingDesk() {
                     min="0"
                     step="0.01"
                     type="text"
+                    placeholder="Enter grams"
                     value={wWater}
                     onChange={(event) => setWWater(event.target.value)}
                   />
@@ -464,7 +468,7 @@ export function TradingDesk() {
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-on-surface-variant">
-                  Density: {air > 0 ? formatNum(assay.density, 4) : "—"} (W_water / W_air)
+                  Density: {air > 0 && wWater.trim() !== "" ? formatNum(assay.density, 4) : "—"} (W_water / W_air)
                 </span>
               </div>
             </div>
@@ -479,11 +483,11 @@ export function TradingDesk() {
                   <div className="flex items-baseline gap-2">
                     <span className="font-mono text-xs text-on-surface-variant uppercase">Density:</span>
                     <span className="font-mono text-lg font-bold text-on-surface">
-                      {air > 0 ? formatNum(assay.density, 4) : "—"}
+                      {air > 0 && wWater.trim() !== "" ? formatNum(assay.density, 4) : "—"}
                     </span>
                   </div>
                   <span className={`text-xs font-medium ${densityMatch ? "text-tertiary" : "text-primary-dark"}`}>
-                    {!air
+                    {!wAir.trim() || !wWater.trim()
                       ? "Enter air and water weights"
                       : densityMatch
                         ? "W_water / W_air · 24K density match"
@@ -502,9 +506,15 @@ export function TradingDesk() {
             <div className="flex flex-col gap-2.5 text-sm">
               <div className="flex items-center justify-between text-on-surface-variant">
                 <span>
-                  Gross Gold Value ({formatNum(air, 2)}g × {formatGhc(assay.ratePerGram)}/g Base):
+                  Gross Gold Value (
+                  {payoutReady
+                    ? `${formatNum(air, 2)}g × ${formatGhc(assay.ratePerGram)}/g Base`
+                    : "enter weights to compute"}
+                  ):
                 </span>
-                <span className="font-mono font-medium text-on-surface">{formatGhc(payout)}</span>
+                <span className="font-mono font-medium text-on-surface">
+                  {payoutReady ? formatGhc(payout) : "—"}
+                </span>
               </div>
               {/* {subsidy > 0 ? (
                 <div className="flex items-center justify-between text-tertiary">
@@ -529,7 +539,9 @@ export function TradingDesk() {
                   </span>
                   <span className="text-xs text-on-surface-variant">Immediate Physical Intake Settlement</span>
                 </div>
-                <div className="font-mono text-3xl font-bold tracking-tight text-on-surface">{formatGhc(payout)}</div>
+                <div className="font-mono text-3xl font-bold tracking-tight text-on-surface">
+                  {payoutReady ? formatGhc(payout) : "—"}
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-2">
