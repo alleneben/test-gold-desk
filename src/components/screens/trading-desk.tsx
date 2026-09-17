@@ -418,7 +418,7 @@ export function TradingDesk() {
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="input-wair" className="text-xs font-medium text-on-surface-variant">
-                    Dry Weight in Air (W_air)
+                    Air Weight (W_air)
                   </label>
                   <span className="font-mono text-[11px] text-tertiary">Live Scale</span>
                 </div>
@@ -444,9 +444,9 @@ export function TradingDesk() {
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="input-wwater" className="text-xs font-medium text-on-surface-variant">
-                    Submerged Weight in Water (W_water)
+                    Water Weight (W_water)
                   </label>
-                  <span className="font-mono text-[11px] text-on-surface-variant">Archimedes</span>
+                  {/* <span className="font-mono text-[11px] text-on-surface-variant">Archimedes</span> */}
                 </div>
                 <div className="relative flex items-center">
                   <input
