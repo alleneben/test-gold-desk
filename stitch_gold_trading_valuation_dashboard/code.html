@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aureus Vault &amp; Trading Desk</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#faf9f6",
+            "surface": "#ffffff",
+            "surface-subtle": "#f8f7f4",
+            "surface-muted": "#f2f0ea",
+            "primary": "#c5a059",
+            "primary-dark": "#9b7835",
+            "primary-light": "#f6f1e7",
+            "on-surface": "#0f172a",
+            "on-surface-variant": "#64748b",
+            "outline": "#e2e0d8",
+            "outline-light": "#f1efe8",
+            "tertiary": "#15803d",
+            "tertiary-light": "#ecfdf5"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            display: ["Plus Jakarta Sans", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: #faf9f6;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans flex flex-col antialiased selection:bg-primary/20">
+<!-- TOP NAVIGATION -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md border-b border-outline">
+<div class="max-w-[1440px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between gap-8">
+<!-- Brand & Status -->
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex-shrink-0 flex items-center justify-center">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-display font-bold tracking-tight text-base text-on-surface uppercase">Aureus Vault</span>
+<span class="text-xs font-mono text-on-surface-variant tracking-wider">/ DESK</span>
+</div>
+<span class="text-xs text-on-surface-variant font-normal">Physical Bullion &amp; Hydrostatic Assay</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-on-surface-variant">
+<a class="px-3.5 py-2 rounded-lg text-on-surface bg-surface-subtle font-semibold transition-colors" href="#">Trading Desk</a>
+<a class="px-3.5 py-2 rounded-lg hover:text-on-surface transition-colors" href="#">Price Schedules</a>
+<a class="px-3.5 py-2 rounded-lg hover:text-on-surface transition-colors" href="#">Counterparties</a>
+<a class="px-3.5 py-2 rounded-lg hover:text-on-surface transition-colors" href="#">Vault Custody</a>
+<a class="px-3.5 py-2 rounded-lg hover:text-on-surface transition-colors" href="#">Settlement Audit</a>
+</nav>
+<!-- Live Spot Ticker & Desk Profile -->
+<div class="flex items-center gap-6">
+<div class="hidden sm:flex items-center gap-3 pl-4 border-l border-outline">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<div class="flex flex-col text-right">
+<span class="text-[11px] font-mono uppercase tracking-wider text-on-surface-variant">Spot AM Fix</span>
+<span class="font-mono font-semibold text-sm tracking-tight text-on-surface">$2,342.65 <span class="text-xs font-normal text-on-surface-variant">/oz</span></span>
+</div>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-outline">
+<div class="text-right hidden sm:block">
+<div class="text-xs font-semibold text-on-surface leading-tight">Marcus Vance</div>
+<div class="text-[10px] uppercase font-mono tracking-widest text-primary-dark">Senior Bullion Dealer</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-muted border border-outline flex items-center justify-center text-xs font-semibold text-on-surface">
+            MV
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN VIEWPORT -->
+<main class="flex-1 max-w-[1440px] w-full mx-auto px-6 lg:px-10 py-8 flex flex-col gap-10">
+<!-- 1. STREAMLINED OPERATIONAL HEADLINE METRICS (Pure & Airy) -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6 pb-2 border-b border-outline/70">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium uppercase tracking-wider text-on-surface-variant font-mono">Today's Benchmark</span>
+<span class="text-[11px] font-mono text-tertiary">08:30 FIX</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display font-semibold text-2xl tracking-tight text-on-surface">$74.20</span>
+<span class="text-xs text-on-surface-variant font-mono">BID</span>
+<span class="text-xs text-outline mx-0.5">/</span>
+<span class="font-display font-semibold text-2xl tracking-tight text-on-surface">$76.80</span>
+<span class="text-xs text-on-surface-variant font-mono">ASK</span>
+</div>
+<span class="text-xs text-on-surface-variant">London Bullion Market Standard</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium uppercase tracking-wider text-on-surface-variant font-mono">Volume Traded</span>
+<span class="text-[11px] font-mono text-on-surface-variant">TODAY</span>
+</div>
+<div class="flex items-baseline gap-1.5 mt-1">
+<span class="font-mono font-semibold text-2xl tracking-tight text-on-surface">4,825.40</span>
+<span class="text-xs text-on-surface-variant">grams</span>
+</div>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant font-mono">
+<span class="text-tertiary">↑ 3,120.0g In</span>
+<span>•</span>
+<span class="text-on-surface">↓ 1,705.4g Out</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium uppercase tracking-wider text-on-surface-variant font-mono">Net Settlement</span>
+<span class="text-[11px] font-mono text-on-surface-variant">EUR/USD</span>
+</div>
+<div class="flex items-baseline gap-1.5 mt-1">
+<span class="font-mono font-semibold text-2xl tracking-tight text-on-surface">-$100,485.00</span>
+</div>
+<span class="text-xs text-on-surface-variant">Net vault payout on balance</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium uppercase tracking-wider text-on-surface-variant font-mono">Desk Tickets</span>
+<span class="text-[11px] font-mono text-tertiary flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 100% ASSAYED
+          </span>
+</div>
+<div class="flex items-baseline gap-1.5 mt-1">
+<span class="font-display font-semibold text-2xl tracking-tight text-on-surface">25</span>
+<span class="text-xs text-on-surface-variant">completed tickets</span>
+</div>
+<span class="text-xs text-on-surface-variant">18 Walk-in • 7 Account VIPs</span>
+</div>
+</div>
+<!-- 2. TWO-COLUMN BALANCED WORKSPACE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<!-- LEFT COLUMN: INTAKE & METROLOGY FORM (7 of 12) -->
+<div class="lg:col-span-7 flex flex-col gap-8 bg-surface rounded-2xl p-7 lg:p-9 border border-outline shadow-sm">
+<!-- Header & Segmented Direction Toggle -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-outline">
+<div class="flex flex-col">
+<h2 class="font-display font-bold text-xl tracking-tight text-on-surface">Bullion Intake &amp; Assay Execution</h2>
+<p class="text-xs text-on-surface-variant mt-0.5 font-mono">TICKET #TK-8942 • METTLER TOLEDO PRECISION LINKED</p>
+</div>
+<!-- Minimal Inflow / Outflow Toggle -->
+<div class="inline-flex p-1 bg-surface-subtle border border-outline rounded-xl self-start sm:self-auto">
+<button class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-surface text-on-surface shadow-xs transition-all flex items-center gap-1.5" id="tab-buy">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Buy (Inflow)
+            </button>
+<button class="px-4 py-1.5 text-xs font-medium rounded-lg text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5" id="tab-sell">
+              Sell (Outflow)
+            </button>
+</div>
+</div>
+<!-- Counterparty Selector & Metadata -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<label class="text-xs font-mono uppercase tracking-wider text-on-surface-variant font-medium">1. Counterparty Details</label>
+<span class="text-xs font-mono text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> KYC / AML Verified
+            </span>
+</div>
+<!-- Minimal Segmented Selector -->
+<div class="grid grid-cols-2 gap-3">
+<label class="relative flex flex-col p-3.5 rounded-xl border border-outline bg-surface-subtle hover:bg-surface cursor-pointer transition-all has-[:checked]:border-primary has-[:checked]:bg-primary-light/40">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-semibold text-on-surface">Walk-in Client</span>
+<input class="text-primary focus:ring-0 w-3.5 h-3.5 border-outline" name="client-type" type="radio" value="walkin"/>
+</div>
+<span class="text-xs text-on-surface-variant">Spot board fix, standard desk spread.</span>
+</label>
+<label class="relative flex flex-col p-3.5 rounded-xl border border-outline bg-surface-subtle hover:bg-surface cursor-pointer transition-all has-[:checked]:border-primary has-[:checked]:bg-primary-light/40">
+<div class="flex items-center justify-between mb-1">
+<span class="text-sm font-semibold text-on-surface flex items-center gap-1.5">
+                  Loyal Account VIP
+                </span>
+<input checked="" class="text-primary focus:ring-0 w-3.5 h-3.5 border-outline" name="client-type" type="radio" value="loyal"/>
+</div>
+<span class="text-xs text-on-surface-variant">Tier 1 Sovereign • +$0.50/g buy subsidy incentive</span>
+</label>
+</div>
+<!-- Clean Client Fields -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-1">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs text-on-surface-variant font-medium">Entity / Client Full Name</label>
+<input class="w-full bg-surface-subtle border border-outline rounded-lg px-3.5 py-2 text-sm text-on-surface focus:outline-none focus:border-primary focus:bg-surface transition-colors" type="text" value="Apex Minting Ltd (David O'Connor)"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs text-on-surface-variant font-medium">Custody Account Reference</label>
+<div class="relative">
+<input class="w-full bg-surface-subtle border border-outline rounded-lg px-3.5 py-2 text-sm font-mono text-on-surface" readonly="" type="text" value="#AU-9428-LDN"/>
+<span class="absolute right-3 top-2.5 text-[11px] font-mono text-tertiary">SAFE #14</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Karat Fix Benchmark Reference Row -->
+<div class="flex flex-col gap-3 pt-2">
+<div class="flex items-center justify-between">
+<label class="text-xs font-mono uppercase tracking-wider text-on-surface-variant font-medium">2. Board Fixing Benchmark</label>
+<span class="text-xs text-on-surface-variant font-mono">Live AM Fixing</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<div class="p-3 rounded-xl border border-primary/40 bg-primary-light/30 flex flex-col gap-0.5">
+<span class="text-xs font-semibold text-on-surface">24K Fine</span>
+<span class="font-mono text-base font-bold text-on-surface">$74.20<span class="text-xs font-normal text-on-surface-variant">/g</span></span>
+<span class="text-[10px] text-tertiary font-mono uppercase font-medium mt-0.5">Active Baseline</span>
+</div>
+<div class="p-3 rounded-xl border border-outline bg-surface-subtle flex flex-col gap-0.5">
+<span class="text-xs font-medium text-on-surface">22K Crown</span>
+<span class="font-mono text-base font-semibold text-on-surface">$68.05<span class="text-xs font-normal text-on-surface-variant">/g</span></span>
+<span class="text-[10px] text-on-surface-variant font-mono">91.6% Au</span>
+</div>
+<div class="p-3 rounded-xl border border-outline bg-surface-subtle flex flex-col gap-0.5">
+<span class="text-xs font-medium text-on-surface">18K Alloy</span>
+<span class="font-mono text-base font-semibold text-on-surface">$55.65<span class="text-xs font-normal text-on-surface-variant">/g</span></span>
+<span class="text-[10px] text-on-surface-variant font-mono">75.0% Au</span>
+</div>
+<div class="p-3 rounded-xl border border-outline bg-surface-subtle flex flex-col gap-0.5">
+<span class="text-xs font-medium text-on-surface">14K Standard</span>
+<span class="font-mono text-base font-semibold text-on-surface">$43.40<span class="text-xs font-normal text-on-surface-variant">/g</span></span>
+<span class="text-[10px] text-on-surface-variant font-mono">58.5% Au</span>
+</div>
+</div>
+</div>
+<!-- 3. HYDROSTATIC METROLOGY (ARCHIMEDES SCALE TEST) -->
+<div class="flex flex-col gap-4 p-5 rounded-2xl bg-surface-subtle border border-outline">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-4 bg-primary rounded-full"></span>
+<span class="text-xs font-mono uppercase tracking-wider font-semibold text-on-surface">Hydrostatic Metrology Assay</span>
+</div>
+<span class="text-xs text-on-surface-variant font-mono">Water Temp: 20.2°C (Factor 1.000)</span>
+</div>
+<!-- Two-field Input Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Air Weight -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-medium text-on-surface-variant">Dry Weight in Air (W_air)</label>
+<span class="text-[11px] font-mono text-tertiary">Live Scale</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full bg-surface border border-outline rounded-xl px-4 py-2.5 font-mono text-lg font-semibold text-on-surface focus:outline-none focus:border-primary transition-colors pr-16" id="input-wair" step="0.01" type="number" value="254.80"/>
+<span class="absolute right-4 text-xs font-mono text-on-surface-variant pointer-events-none">grams</span>
+</div>
+<span class="text-[11px] text-on-surface-variant font-mono">~8.1920 Troy Ounces (ozt)</span>
+</div>
+<!-- Submerged Weight -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-medium text-on-surface-variant">Submerged Weight in Water (W_water)</label>
+<span class="text-[11px] font-mono text-on-surface-variant">Archimedes</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full bg-surface border border-outline rounded-xl px-4 py-2.5 font-mono text-lg font-semibold text-on-surface focus:outline-none focus:border-primary transition-colors pr-16" id="input-wwater" step="0.01" type="number" value="241.60"/>
+<span class="absolute right-4 text-xs font-mono text-on-surface-variant pointer-events-none">grams</span>
+</div>
+<span class="text-[11px] text-on-surface-variant font-mono" id="label-displacement">Displacement: 13.20 cm³</span>
+</div>
+</div>
+<!-- Clean Computation Bar -->
+<div class="mt-2 pt-4 border-t border-outline flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-tertiary-light flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-2">
+<span class="text-xs font-mono text-on-surface-variant uppercase">Specific Gravity:</span>
+<span class="font-mono text-lg font-bold text-on-surface" id="output-density">19.30</span>
+<span class="text-xs font-mono text-on-surface-variant">g/cm³</span>
+</div>
+<span class="text-xs text-tertiary font-medium">99.8% Density Tolerance Match</span>
+</div>
+</div>
+<div class="text-right sm:border-l sm:border-outline sm:pl-6">
+<div class="text-[11px] font-mono uppercase text-on-surface-variant">Assay Result</div>
+<div class="font-display font-bold text-sm text-primary-dark" id="output-karat">24K Fine Bullion (99.9% Au)</div>
+</div>
+</div>
+</div>
+<!-- 4. VALUATION BREAKDOWN & SINGLE DEFINITIVE ACTION -->
+<div class="flex flex-col gap-5 pt-2">
+<div class="flex flex-col gap-2.5 text-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Gross Gold Value (254.80g × $74.20/g Base):</span>
+<span class="font-mono text-on-surface font-medium" id="val-base">$18,906.16</span>
+</div>
+<div class="flex items-center justify-between text-tertiary">
+<span class="flex items-center gap-1.5">
+                VIP Account Subsidy (+$0.50/g applied):
+              </span>
+<span class="font-mono font-medium" id="val-premium">+$127.40</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Hydrostatic Assay Metrology Fee:</span>
+<span class="font-mono text-xs">Waived ($0.00)</span>
+</div>
+<div class="h-px bg-outline my-1"></div>
+<div class="flex items-baseline justify-between pt-1">
+<div class="flex flex-col">
+<span class="text-xs font-mono uppercase tracking-wider text-on-surface-variant">Net Payout to Counterparty</span>
+<span class="text-xs text-on-surface-variant">Immediate Physical Intake Settlement</span>
+</div>
+<div class="font-mono font-bold text-3xl tracking-tight text-on-surface" id="val-total">$19,033.56</div>
+</div>
+</div>
+<!-- Settlement Disbursement Selection -->
+<div class="flex flex-col gap-2">
+<span class="text-xs font-mono uppercase tracking-wider text-on-surface-variant">Disbursement Method</span>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-2 px-3 rounded-lg border border-primary bg-primary-light/40 text-on-surface text-xs font-medium text-center" type="button">
+                SEPA Wire Transfer
+              </button>
+<button class="py-2 px-3 rounded-lg border border-outline bg-surface-subtle hover:bg-surface text-on-surface-variant hover:text-on-surface text-xs font-medium text-center transition-colors" type="button">
+                Vault Cash Drawer
+              </button>
+<button class="py-2 px-3 rounded-lg border border-outline bg-surface-subtle hover:bg-surface text-on-surface-variant hover:text-on-surface text-xs font-medium text-center transition-colors" type="button">
+                Custody Cheque
+              </button>
+</div>
+</div>
+<!-- Primary Clean Action CTA -->
+<div class="pt-2">
+<button class="w-full py-4 px-6 rounded-xl bg-on-surface hover:bg-black text-surface font-display font-semibold text-sm tracking-wide shadow-sm hover:shadow transition-all flex items-center justify-center gap-2" id="btn-execute-ticket">
+<span class="material-symbols-outlined text-[18px] text-primary">verified</span>
+<span>Authorize &amp; Print Assay Settlement ($19,033.56)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: REFERENCE SCHEDULE & COUNTERPARTY CONTEXT (5 of 12) -->
+<div class="lg:col-span-5 flex flex-col gap-8">
+<!-- CARD 1: DAILY GOLD BOARD PRICE SCHEDULE -->
+<div class="bg-surface rounded-2xl p-7 border border-outline shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between pb-3 border-b border-outline">
+<div class="flex flex-col">
+<h3 class="font-display font-bold text-base text-on-surface">Daily Gold Board Price Schedule</h3>
+<span class="text-xs text-on-surface-variant font-mono">FIXED RATE MATRIX • LBMA BENCHMARK</span>
+</div>
+<button class="text-xs text-primary font-mono hover:underline">Edit Margins</button>
+</div>
+<!-- Open Borderless Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="text-on-surface-variant border-b border-outline font-mono">
+<th class="py-2.5 font-medium">Grade</th>
+<th class="py-2.5 font-medium">Density (g/cm³)</th>
+<th class="py-2.5 font-medium text-right">Walk-in</th>
+<th class="py-2.5 font-medium text-right text-primary-dark">Loyal VIP</th>
+</tr>
+</thead>
+<tbody class="font-mono divide-y divide-outline/50">
+<tr class="hover:bg-surface-subtle/70 transition-colors">
+<td class="py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    24K (99.9%)
+                  </td>
+<td class="py-3 text-on-surface-variant">19.28 – 19.32</td>
+<td class="py-3 text-right text-on-surface">$73.80</td>
+<td class="py-3 text-right font-semibold text-primary-dark">$74.30</td>
+</tr>
+<tr class="hover:bg-surface-subtle/70 transition-colors">
+<td class="py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    22K (91.6%)
+                  </td>
+<td class="py-3 text-on-surface-variant">17.50 – 18.10</td>
+<td class="py-3 text-right text-on-surface">$67.50</td>
+<td class="py-3 text-right font-semibold text-primary-dark">$68.10</td>
+</tr>
+<tr class="hover:bg-surface-subtle/70 transition-colors">
+<td class="py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    18K (75.0%)
+                  </td>
+<td class="py-3 text-on-surface-variant">15.20 – 15.80</td>
+<td class="py-3 text-right text-on-surface">$55.10</td>
+<td class="py-3 text-right font-semibold text-primary-dark">$55.70</td>
+</tr>
+<tr class="hover:bg-surface-subtle/70 transition-colors">
+<td class="py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    14K (58.5%)
+                  </td>
+<td class="py-3 text-on-surface-variant">13.10 – 13.90</td>
+<td class="py-3 text-right text-on-surface">$42.80</td>
+<td class="py-3 text-right font-semibold text-primary-dark">$43.40</td>
+</tr>
+<tr class="hover:bg-surface-subtle/70 transition-colors">
+<td class="py-3 font-semibold text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Scrap / Melt
+                  </td>
+<td class="py-3 text-on-surface-variant">&lt; 14.80 Var</td>
+<td class="py-3 text-right text-on-surface">$42.00</td>
+<td class="py-3 text-right font-semibold text-primary-dark">$42.60</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="text-[11px] text-on-surface-variant pt-1 flex items-center justify-between border-t border-outline font-mono">
+<span>Fix locked for next 4h 12m</span>
+<span>LBMA PM SYNC 15:00</span>
+</div>
+</div>
+<!-- CARD 2: VIP COUNTERPARTY PROFILE & RECENT TICKETS -->
+<div class="bg-surface rounded-2xl p-7 border border-outline shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between pb-3 border-b border-outline">
+<div class="flex flex-col">
+<h3 class="font-display font-bold text-base text-on-surface">Counterparty Intelligence</h3>
+<span class="text-xs text-on-surface-variant font-mono">APEX MINTING LTD • VIP GOLD TIER</span>
+</div>
+<span class="text-xs font-mono font-semibold text-primary-dark bg-primary-light px-2.5 py-1 rounded-full">VIP Sovereign</span>
+</div>
+<!-- Custody Metrics Trio -->
+<div class="grid grid-cols-3 gap-3">
+<div class="p-3 rounded-xl bg-surface-subtle border border-outline flex flex-col">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant">YTD Turnover</span>
+<span class="font-mono text-base font-bold text-on-surface mt-1">$1.42M</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-subtle border border-outline flex flex-col">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant">In Custody</span>
+<span class="font-mono text-base font-bold text-on-surface mt-1">18.4 kg</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-subtle border border-outline flex flex-col">
+<span class="text-[10px] font-mono uppercase text-on-surface-variant">Assay Accuracy</span>
+<span class="font-mono text-base font-bold text-tertiary mt-1">99.98%</span>
+</div>
+</div>
+<!-- Frequent Counterparty Switcher -->
+<div class="flex flex-col gap-2 pt-2">
+<span class="text-xs font-mono uppercase tracking-wider text-on-surface-variant">Recent Frequent Counterparties</span>
+<div class="flex flex-col gap-1.5">
+<div class="p-2.5 rounded-xl border border-outline hover:border-primary/50 transition-colors flex items-center justify-between cursor-pointer bg-surface hover:bg-surface-subtle">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-surface-muted flex items-center justify-center text-[10px] font-mono font-bold text-on-surface">GV</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-on-surface">Geneva Vaulting Ltd</span>
+<span class="text-[10px] font-mono text-on-surface-variant">#AU-1049 • Platinum VIP</span>
+</div>
+</div>
+<span class="text-xs font-mono text-primary-dark font-medium">+$0.65/g</span>
+</div>
+<div class="p-2.5 rounded-xl border border-outline hover:border-primary/50 transition-colors flex items-center justify-between cursor-pointer bg-surface hover:bg-surface-subtle">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-surface-muted flex items-center justify-center text-[10px] font-mono font-bold text-on-surface">AF</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-on-surface">Aurum Fine Jewelers</span>
+<span class="text-[10px] font-mono text-on-surface-variant">#AU-7712 • Commercial</span>
+</div>
+</div>
+<span class="text-xs font-mono text-primary-dark font-medium">+$0.40/g</span>
+</div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant pt-2 border-t border-outline font-mono">
+            Archimedes ISO-17025 certified buoyancy gravimetry with zero melt loss tolerance.
+          </p>
+</div>
+</div>
+</div>
+<!-- 3. MINIMALIST RECENT TRANSACTIONS & ASSAY LEDGER -->
+<div class="bg-surface rounded-2xl p-7 lg:p-9 border border-outline shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline">
+<div class="flex flex-col">
+<h3 class="font-display font-bold text-lg text-on-surface">Live Transactions &amp; Hydrostatic Assay Audit Ledger</h3>
+<p class="text-xs text-on-surface-variant font-mono mt-0.5">Continuous verification log under London Bullion Clearing Rules</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1.5 rounded-lg border border-outline text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+          </button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-subtle hover:bg-surface-muted border border-outline text-xs font-medium text-on-surface transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+          </button>
+</div>
+</div>
+<!-- Clean Open Table -->
+<div class="overflow-x-auto -mx-2">
+<table class="w-full text-left text-xs min-w-[900px]">
+<thead>
+<tr class="text-on-surface-variant font-mono uppercase tracking-wider border-b border-outline">
+<th class="py-3 px-3 font-medium">Ticket / Time</th>
+<th class="py-3 px-3 font-medium">Counterparty</th>
+<th class="py-3 px-3 font-medium text-center">Type</th>
+<th class="py-3 px-3 font-medium text-right">Air Wt (g)</th>
+<th class="py-3 px-3 font-medium text-right">Water Wt (g)</th>
+<th class="py-3 px-3 font-medium">Density / Karat</th>
+<th class="py-3 px-3 font-medium text-right">Fix Rate</th>
+<th class="py-3 px-3 font-medium text-right">Settlement</th>
+<th class="py-3 px-3 font-medium text-center">Status</th>
+<th class="py-3 px-3 font-medium text-right">Assay Slip</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline/60 font-mono">
+<tr class="hover:bg-surface-subtle/50 transition-colors">
+<td class="py-4 px-3">
+<span class="font-semibold text-on-surface">#TK-8941</span>
+<span class="block text-[11px] text-on-surface-variant">11:42 AM</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-sans font-medium text-on-surface block">Marcus Albright</span>
+<span class="text-[11px] text-on-surface-variant font-mono">Walk-in Direct</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] font-semibold text-tertiary bg-tertiary-light px-2 py-0.5 rounded">BUY</span>
+</td>
+<td class="py-4 px-3 text-right font-medium text-on-surface">125.40 g</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">118.80 g</td>
+<td class="py-4 px-3">
+<span class="text-on-surface font-medium">18.99 g/cm³</span>
+<span class="block text-[11px] text-on-surface-variant">22K Crown</span>
+</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">$67.50/g</td>
+<td class="py-4 px-3 text-right font-bold text-on-surface">$8,464.50</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] text-tertiary font-medium">Settled</span>
+</td>
+<td class="py-4 px-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span> Slip
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-subtle/50 transition-colors">
+<td class="py-4 px-3">
+<span class="font-semibold text-on-surface">#TK-8940</span>
+<span class="block text-[11px] text-on-surface-variant">11:15 AM</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-sans font-medium text-on-surface block">Geneva Vaulting Ltd</span>
+<span class="text-[11px] text-primary-dark font-mono font-medium">Loyal VIP #AU-1049</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] font-semibold text-primary-dark bg-primary-light px-2 py-0.5 rounded">SELL</span>
+</td>
+<td class="py-4 px-3 text-right font-medium text-on-surface">500.00 g</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">474.10 g</td>
+<td class="py-4 px-3">
+<span class="text-on-surface font-medium">19.31 g/cm³</span>
+<span class="block text-[11px] text-on-surface-variant">24K Bullion 999.9</span>
+</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">$76.80/g</td>
+<td class="py-4 px-3 text-right font-bold text-on-surface">$38,400.00</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] text-on-surface-variant font-medium">Completed</span>
+</td>
+<td class="py-4 px-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span> Slip
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-subtle/50 transition-colors">
+<td class="py-4 px-3">
+<span class="font-semibold text-on-surface">#TK-8939</span>
+<span class="block text-[11px] text-on-surface-variant">10:48 AM</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-sans font-medium text-on-surface block">Elena Rostova</span>
+<span class="text-[11px] text-on-surface-variant font-mono">Walk-in Direct</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] font-semibold text-tertiary bg-tertiary-light px-2 py-0.5 rounded">BUY</span>
+</td>
+<td class="py-4 px-3 text-right font-medium text-on-surface">42.10 g</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">39.42 g</td>
+<td class="py-4 px-3">
+<span class="text-on-surface font-medium">15.70 g/cm³</span>
+<span class="block text-[11px] text-on-surface-variant">18K Alloy</span>
+</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">$55.10/g</td>
+<td class="py-4 px-3 text-right font-bold text-on-surface">$2,319.71</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] text-tertiary font-medium">Settled</span>
+</td>
+<td class="py-4 px-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span> Slip
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-subtle/50 transition-colors">
+<td class="py-4 px-3">
+<span class="font-semibold text-on-surface">#TK-8938</span>
+<span class="block text-[11px] text-on-surface-variant">10:12 AM</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-sans font-medium text-on-surface block">Aurum Fine Jewelers</span>
+<span class="text-[11px] text-primary-dark font-mono font-medium">Loyal VIP #AU-7712</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] font-semibold text-tertiary bg-tertiary-light px-2 py-0.5 rounded">BUY</span>
+</td>
+<td class="py-4 px-3 text-right font-medium text-on-surface">310.80 g</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">294.60 g</td>
+<td class="py-4 px-3">
+<span class="text-on-surface font-medium">19.18 g/cm³</span>
+<span class="block text-[11px] text-on-surface-variant">22K Casting</span>
+</td>
+<td class="py-4 px-3 text-right text-on-surface-variant">$68.10/g</td>
+<td class="py-4 px-3 text-right font-bold text-on-surface">$21,165.48</td>
+<td class="py-4 px-3 text-center">
+<span class="text-[11px] text-tertiary font-medium">Settled</span>
+</td>
+<td class="py-4 px-3 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span> Slip
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Quiet Minimal Pagination -->
+<div class="flex items-center justify-between pt-2 border-t border-outline text-xs text-on-surface-variant font-mono">
+<span>Showing 4 of 25 trades</span>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-surface-subtle text-on-surface font-semibold border border-outline">1</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-subtle text-on-surface-variant transition-colors">2</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-subtle text-on-surface-variant transition-colors">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="px-2.5 py-1 rounded hover:bg-surface-subtle text-on-surface-variant transition-colors">Next →</button>
+</div>
+</div>
+</div>
+</main>
+<!-- CLEAN LUXURY FOOTER -->
+<footer class="mt-auto border-t border-outline bg-surface py-6 text-xs text-on-surface-variant font-mono">
+<div class="max-w-[1440px] mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="font-semibold text-on-surface">AUREUS VAULT DEPOSITORY</span>
+<span class="text-outline">•</span>
+<span>Zurich &amp; Mayfair Network</span>
+<span class="text-outline">•</span>
+<span>Archimedes ISO/IEC 17025</span>
+</div>
+<div class="flex items-center gap-4">
+<span>Clearing ID: <span class="text-on-surface">AU-9994-LDN</span></span>
+<span class="text-outline">•</span>
+<span>Session: <span class="text-on-surface">SEC-8492-OK</span></span>
+</div>
+</div>
+</footer>
+<!-- METROLOGY FORM ENGINE SCRIPT -->
+<script>
+    (function() {
+      const inputWair = document.getElementById('input-wair');
+      const inputWwater = document.getElementById('input-wwater');
+      const outputDensity = document.getElementById('output-density');
+      const outputKarat = document.getElementById('output-karat');
+      const labelDisplacement = document.getElementById('label-displacement');
+      const valBase = document.getElementById('val-base');
+      const valPremium = document.getElementById('val-premium');
+      const valTotal = document.getElementById('val-total');
+      const btnExecute = document.getElementById('btn-execute-ticket');
+      
+      const tabBuy = document.getElementById('tab-buy');
+      const tabSell = document.getElementById('tab-sell');
+      let tradeDirection = 'BUY';
+
+      tabBuy?.addEventListener('click', () => {
+        tradeDirection = 'BUY';
+        tabBuy.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg bg-surface text-on-surface shadow-xs transition-all flex items-center gap-1.5';
+        tabSell.className = 'px-4 py-1.5 text-xs font-medium rounded-lg text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5';
+        calculateAssay();
+      });
+
+      tabSell?.addEventListener('click', () => {
+        tradeDirection = 'SELL';
+        tabSell.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg bg-surface text-on-surface shadow-xs transition-all flex items-center gap-1.5';
+        tabBuy.className = 'px-4 py-1.5 text-xs font-medium rounded-lg text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5';
+        calculateAssay();
+      });
+
+      function calculateAssay() {
+        const wAir = parseFloat(inputWair.value) || 0;
+        const wWater = parseFloat(inputWwater.value) || 0;
+        const displacedVolume = Math.max(0.001, wAir - wWater);
+        const specificGravity = displacedVolume > 0 ? (wAir / displacedVolume) : 0;
+
+        if (labelDisplacement) labelDisplacement.textContent = `Displacement: ${displacedVolume.toFixed(2)} cm³`;
+        if (outputDensity) outputDensity.textContent = specificGravity.toFixed(2);
+
+        let karatLabel = 'Assay Required';
+        let ratePerGram = 74.20;
+
+        if (specificGravity >= 19.20 && specificGravity <= 19.38) {
+          karatLabel = '24K Fine Bullion (99.9% Au)';
+          ratePerGram = tradeDirection === 'BUY' ? 74.20 : 76.80;
+        } else if (specificGravity >= 17.50 && specificGravity < 19.20) {
+          karatLabel = '22K Sovereign / Crown (91.6% Au)';
+          ratePerGram = tradeDirection === 'BUY' ? 68.05 : 70.40;
+        } else if (specificGravity >= 15.00 && specificGravity < 17.50) {
+          karatLabel = '18K Fine Alloy (75.0% Au)';
+          ratePerGram = tradeDirection === 'BUY' ? 55.65 : 57.90;
+        } else if (specificGravity >= 12.50 && specificGravity < 15.00) {
+          karatLabel = '14K Commercial Gold (58.5% Au)';
+          ratePerGram = tradeDirection === 'BUY' ? 43.40 : 45.60;
+        } else if (specificGravity > 0) {
+          karatLabel = 'Low Carat / Scrap';
+          ratePerGram = tradeDirection === 'BUY' ? 42.00 : 44.50;
+        }
+
+        if (outputKarat) outputKarat.textContent = karatLabel;
+
+        const baseVal = wAir * ratePerGram;
+        const vipSubsidyPerGram = 0.50;
+        const premiumVal = wAir * vipSubsidyPerGram;
+        const finalPayout = baseVal + premiumVal;
+
+        if (valBase) valBase.textContent = `$${baseVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        if (valPremium) valPremium.textContent = `+$${premiumVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        if (valTotal) valTotal.textContent = `$${finalPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        if (btnExecute) {
+          const actionText = tradeDirection === 'BUY' ? 'Authorize & Print Assay Settlement' : 'Authorize & Execute Bullion Sale';
+          btnExecute.innerHTML = `<span class="material-symbols-outlined text-[18px] text-primary">verified</span><span>${actionText} ($${finalPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>`;
+        }
+      }
+
+      inputWair?.addEventListener('input', calculateAssay);
+      inputWwater?.addEventListener('input', calculateAssay);
+
+      calculateAssay();
+    })();
+  </script>
+</body></html>
