@@ -1,5 +1,5 @@
-export const PRICE_SCHEDULE_STORAGE_KEY = "aureus.goldbod.price-schedule.v1";
-export const PRICE_SCHEDULE_EVENT = "aureus-goldbod-schedule";
+export const PRICE_SCHEDULE_STORAGE_KEY = "Versitechgh Gold.goldbod.price-schedule.v1";
+export const PRICE_SCHEDULE_EVENT = "Versitechgh Gold-goldbod-schedule";
 
 export type PriceScheduleRow = {
   id: string;

@@ -11,8 +11,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "Aureus Vault & Trading Desk",
-    template: "%s · Aureus Vault",
+    default: "Versitechgh Gold Vault & Trading Desk",
+    template: "%s · Versitechgh Gold Vault",
   },
   description: "Physical bullion trading desk with hydrostatic assay valuation and LBMA board schedules.",
 };

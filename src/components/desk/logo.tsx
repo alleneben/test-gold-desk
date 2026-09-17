@@ -1,14 +1,14 @@
-export function AureusMark({ className }: { className?: string }) {
+export function Versitechgh GoldMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden>
       <defs>
-        <linearGradient id="aureus-gold" x1="0" x2="1" y1="0" y2="1">
+        <linearGradient id="Versitechgh Gold-gold" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0%" stopColor="#e9c176" />
           <stop offset="50%" stopColor="#c5a059" />
           <stop offset="100%" stopColor="#9b7835" />
         </linearGradient>
       </defs>
-      <rect width="40" height="40" rx="10" fill="url(#aureus-gold)" />
+      <rect width="40" height="40" rx="10" fill="url(#Versitechgh Gold-gold)" />
       <path
         d="M12 26V16.5L20 11.5L28 16.5V26H12Z"
         fill="none"

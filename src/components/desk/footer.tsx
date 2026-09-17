@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-outline bg-surface py-6 font-mono text-xs text-on-surface-variant">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-4 px-6 md:flex-row lg:px-10">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <span className="font-semibold text-on-surface">AUREUS VAULT DEPOSITORY</span>
+          <span className="font-semibold text-on-surface">Versitechgh Gold VAULT DEPOSITORY</span>
           <span className="text-outline">•</span>
           <span>Zurich & Mayfair Network</span>
           <span className="text-outline">•</span>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AureusMark } from "@/components/desk/logo";
+import { Versitechgh GoldMark } from "@/components/desk/logo";
 import { Icon } from "@/components/desk/icon";
 import { NAV_ITEMS } from "@/lib/nav";
 
@@ -19,11 +19,11 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-outline bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between gap-8 px-6 lg:px-10">
         <Link href="/" className="flex items-center gap-4" onClick={() => setMenuOpen(false)}>
-          <AureusMark className="h-10 w-10 shrink-0" />
+          <Versitechgh GoldMark className="h-10 w-10 shrink-0" />
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="font-headline text-base font-bold tracking-tight text-on-surface uppercase">
-                Aureus Vault
+                Versitechgh Gold Vault
               </span>
               <span className="font-mono text-xs tracking-wider text-on-surface-variant">/ DESK</span>
             </div>
