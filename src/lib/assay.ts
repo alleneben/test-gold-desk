@@ -49,7 +49,7 @@ export function hydrostaticValuation(
 ) {
   const rows = options?.rows ?? DEFAULT_SCHEDULE.rows;
   const clientType = options?.clientType ?? "walkin";
-  const valid = wAir > 0 && wWater >= 0 && wAir > wWater;
+  const valid = wAir > 0 && wWater > 0 && wAir > wWater;
   const displacedVolume = valid ? wAir - wWater : 0;
   const specificGravity = valid ? wAir / displacedVolume : 0;
   const density = wAir > 0 ? wWater / wAir : 0;

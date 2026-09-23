@@ -166,15 +166,15 @@ export function TradingDesk() {
     const headers = [
       "Ticket",
       "Time",
-      "Counterparty",
+      "Seller",
       "Tier",
       "Type",
-      "Air Wt",
-      "Water Wt",
+      "Gross",
+      "Volume",
       "Density",
-      "Karat",
+      "Carat",
       "Rate",
-      "Settlement",
+      "Amount",
       "Status",
     ];
     const lines = [
@@ -312,7 +312,7 @@ export function TradingDesk() {
             <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="client-name" className="text-xs font-medium text-on-surface-variant">
-                  Customer Full Name
+                  Seller
                 </label>
                 {clientType === "loyal" ? (
                   <VipNameField value={selectedVip} onSelect={applyVip} />
@@ -321,7 +321,7 @@ export function TradingDesk() {
                     id="client-name"
                     className="w-full rounded-lg border border-outline bg-surface-subtle px-3.5 py-2 text-sm text-on-surface transition-colors focus:border-primary focus:bg-surface focus:outline-none"
                     type="text"
-                    placeholder="Walk-in client full name"
+                    placeholder="Seller name"
                     value={clientName}
                     onChange={(event) => setClientName(event.target.value)}
                   />
@@ -420,9 +420,9 @@ export function TradingDesk() {
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="input-wair" className="text-xs font-medium text-on-surface-variant">
-                    Air Weight (W_air)
+                    Gross weight
                   </label>
-                  <span className="font-mono text-[11px] text-tertiary">Live Scale</span>
+                  <span className="font-mono text-[11px] text-tertiary">On the scale, in air</span>
                 </div>
                 <div className="relative flex items-center">
                   <input
@@ -441,13 +441,13 @@ export function TradingDesk() {
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-on-surface-variant">
-                  {air > 0 ? `~${formatNum(troyOz, 4)} Troy Ounces (ozt)` : "Troy ounces appear after air weight"}
+                  {air > 0 ? `~${formatNum(troyOz, 4)} Troy Ounces (ozt)` : "On the scale, in air"}
                 </span>
               </div>
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="input-wwater" className="text-xs font-medium text-on-surface-variant">
-                    Water Weight (W_water)
+                    Volume in water
                   </label>
                   {/* <span className="font-mono text-[11px] text-on-surface-variant">Archimedes</span> */}
                 </div>
@@ -459,16 +459,16 @@ export function TradingDesk() {
                     min="0"
                     step="0.01"
                     type="text"
-                    placeholder="Enter grams"
+                    placeholder="Water displaced"
                     value={wWater}
                     onChange={(event) => setWWater(event.target.value)}
                   />
                   <span className="pointer-events-none absolute right-4 font-mono text-xs text-on-surface-variant">
-                    grams
+                    cm³
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-on-surface-variant">
-                  Density: {air > 0 && wWater.trim() !== "" ? formatNum(assay.density, 4) : "—"} (W_water / W_air)
+                  Density: {air > 0 && wWater.trim() !== "" ? formatNum(assay.density, 4) : "—"} (water displaced)
                 </span>
               </div>
             </div>
@@ -488,15 +488,15 @@ export function TradingDesk() {
                   </div>
                   <span className={`text-xs font-medium ${densityMatch ? "text-tertiary" : "text-primary-dark"}`}>
                     {!wAir.trim() || !wWater.trim()
-                      ? "Enter air and water weights"
+                      ? "Enter both weights to price this lot"
                       : densityMatch
-                        ? "W_water / W_air · 24K density match"
-                        : "W_water / W_air"}
+                        ? "Water displaced · 24K density match"
+                        : "Water displaced"}
                   </span>
                 </div>
               </div>
               <div className="text-right sm:border-l sm:border-outline sm:pl-6">
-                <div className="font-mono text-[11px] text-on-surface-variant uppercase">Assay Result</div>
+                <div className="font-mono text-[11px] text-on-surface-variant uppercase">Carat</div>
                 <div className="font-headline text-sm font-bold text-primary-dark">{assay.karatLabel}</div>
               </div>
             </div>
@@ -506,10 +506,10 @@ export function TradingDesk() {
             <div className="flex flex-col gap-2.5 text-sm">
               <div className="flex items-center justify-between text-on-surface-variant">
                 <span>
-                  Gross Gold Value (
+                  Amount payable (
                   {payoutReady
                     ? `${formatNum(air, 2)}g × ${formatGhc(assay.ratePerGram)}/g Base`
-                    : "enter weights to compute"}
+                    : "enter both weights to price this lot"}
                   ):
                 </span>
                 <span className="font-mono font-medium text-on-surface">
@@ -535,9 +535,11 @@ export function TradingDesk() {
               <div className="flex items-baseline justify-between pt-1">
                 <div className="flex flex-col">
                   <span className="font-mono text-xs tracking-wider text-on-surface-variant uppercase">
-                    {direction === "BUY" ? "Net Payout to Customer" : "Net Receipt from Customer"}
+                    Amount payable
                   </span>
-                  <span className="text-xs text-on-surface-variant">Immediate Physical Intake Settlement</span>
+                  <span className="text-xs text-on-surface-variant">
+                    {direction === "BUY" ? "Cash handed over" : "Cash received"}
+                  </span>
                 </div>
                 <div className="font-mono text-3xl font-bold tracking-tight text-on-surface">
                   {payoutReady ? formatGhc(payout) : "—"}
@@ -585,7 +587,7 @@ export function TradingDesk() {
                     ? "Settlement Authorized"
                     : payoutReady
                       ? `${actionLabel} (${formatGhc(payout)})`
-                      : "Enter valid hydrostatic weights"}
+                      : "Enter both weights to price this lot"}
                 </span>
               </button>
             </div>
@@ -680,13 +682,13 @@ export function TradingDesk() {
             <thead>
               <tr className="border-b border-outline font-mono tracking-wider text-on-surface-variant uppercase">
                 <th className="px-3 py-3 font-medium">Ticket / Time</th>
-                <th className="px-3 py-3 font-medium">Counterparty</th>
+                <th className="px-3 py-3 font-medium">Seller</th>
                 <th className="px-3 py-3 text-center font-medium">Type</th>
-                <th className="px-3 py-3 text-right font-medium">Air Wt (g)</th>
-                <th className="px-3 py-3 text-right font-medium">Water Wt (g)</th>
-                <th className="px-3 py-3 font-medium">Density / Karat</th>
+                <th className="px-3 py-3 text-right font-medium">Gross</th>
+                <th className="px-3 py-3 text-right font-medium">Volume</th>
+                <th className="px-3 py-3 font-medium">Density / Carat</th>
                 <th className="px-3 py-3 text-right font-medium">Fix Rate</th>
-                <th className="px-3 py-3 text-right font-medium">Settlement</th>
+                <th className="px-3 py-3 text-right font-medium">Amount</th>
                 <th className="px-3 py-3 text-center font-medium">Status</th>
                 <th className="px-3 py-3 text-right font-medium">Assay Slip</th>
               </tr>

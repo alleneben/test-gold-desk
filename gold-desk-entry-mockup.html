@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gold Desk — purchase entry</title>
+<style>
+  :root{
+    --ink:#12211C; --paper:#FBFBF8; --panel:#FFFFFF; --line:#D9DDD8;
+    --green:#0B6E4F; --green-soft:#E7F0EC; --brass:#9A7434;
+    --muted:#6C7A74; --alert:#A32B22;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Inter","Helvetica Neue",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);
+    -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;padding:20px;
+  }
+  .wrap{max-width:520px;margin:0 auto}
+  .intro{margin-bottom:20px}
+  .intro h1{font-size:1.3rem;font-weight:600;letter-spacing:-0.015em;margin-bottom:6px}
+  .intro p{color:var(--muted);font-size:.88rem;line-height:1.55}
+
+  .device{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+
+  .bar{display:flex;justify-content:space-between;align-items:baseline;
+    padding:14px 20px;border-bottom:1px solid var(--line)}
+  .bar strong{font-size:.95rem;font-weight:600}
+  .bar span{font-size:.78rem;color:var(--muted)}
+
+  .switch{display:flex;gap:4px;padding:12px 20px 0}
+  .switch button{
+    flex:1;font:inherit;font-size:.87rem;font-weight:500;padding:9px 0;cursor:pointer;
+    background:#F3F4F1;border:none;border-radius:8px;color:var(--muted);
+  }
+  .switch button[aria-selected="true"]{background:var(--ink);color:#fff}
+  .switch button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+  .readout{padding:20px 20px 16px;border-bottom:1px solid var(--line)}
+  .readout .label{font-size:.78rem;color:var(--muted);margin-bottom:2px}
+  .amount{font-size:2.8rem;font-weight:600;letter-spacing:-0.03em;line-height:1}
+  .amount small{font-size:1.05rem;font-weight:500;color:var(--muted);margin-right:6px}
+  .chips{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}
+  .chip{font-size:.76rem;padding:5px 10px;border-radius:999px;background:var(--green-soft);color:var(--green)}
+  .chip.brass{background:#F4EEE3;color:var(--brass)}
+  .chip.warn{background:#F8E9E7;color:var(--alert)}
+
+  .fields{padding:6px 20px}
+  .row{display:flex;justify-content:space-between;align-items:center;
+    padding:12px;margin:0 -12px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:8px}
+  .row:last-child{border-bottom:none}
+  .row .name{font-size:.9rem}
+  .row .hint{font-size:.74rem;color:var(--muted);display:block;margin-top:2px}
+  .row .val{font-size:1.12rem;font-weight:500}
+  .row .val em{font-style:normal;color:var(--muted);font-size:.85rem;margin-left:3px}
+  .row.on{background:var(--green-soft)}
+  .row.on .val{color:var(--green);font-weight:600}
+  .row.on .val::after{content:"";display:inline-block;width:2px;height:16px;background:var(--green);
+    margin-left:3px;vertical-align:-3px;animation:blink 1.1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){.row.on .val::after{animation:none}}
+
+  .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 20px 18px}
+  .pad button{font:inherit;font-size:1.3rem;font-weight:500;padding:15px 0;
+    background:#F3F4F1;border:none;border-radius:9px;color:var(--ink);cursor:pointer}
+  .pad button:active{background:#E4E7E3}
+  .pad button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .pad .go{background:var(--green);color:#fff;grid-column:span 3;font-size:1rem;padding:15px 0}
+  .pad .go[disabled]{background:#C3CCC7;cursor:not-allowed}
+
+  .subswitch{display:flex;gap:14px;padding:14px 20px 0;font-size:.8rem}
+  .subswitch button{font:inherit;background:none;border:none;padding:0 0 3px;cursor:pointer;
+    color:var(--muted);border-bottom:2px solid transparent}
+  .subswitch button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brass)}
+
+  .list{padding:8px 20px 4px;max-height:400px;overflow-y:auto}
+  .empty{color:var(--muted);font-size:.86rem;padding:34px 0;line-height:1.6}
+  .txn{padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .txn:last-child{border-bottom:none}
+  .txn .top{display:flex;justify-content:space-between;align-items:baseline}
+  .txn .who{font-size:.92rem;font-weight:500}
+  .txn .amt{font-size:.98rem;font-weight:600}
+  .txn .sub{font-size:.77rem;color:var(--muted);margin-top:3px}
+  .owed{color:var(--alert)}
+  .detail{margin-top:10px;padding:11px 13px;background:#F7F8F6;border-radius:8px;
+    display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;font-size:.79rem}
+  .detail span{display:flex;justify-content:space-between}
+  .detail span b{font-weight:500}
+  .detail .m{color:var(--muted)}
+
+  table{width:100%;border-collapse:collapse;font-size:.75rem}
+  th,td{padding:7px 5px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--muted);font-weight:500;font-size:.7rem}
+  th:first-child,td:first-child{text-align:left}
+  .scroller{overflow-x:auto;padding:8px 20px 4px;max-height:400px;overflow-y:auto}
+  .sheetnote{padding:0 20px 4px;font-size:.76rem;color:var(--muted);line-height:1.5}
+
+  .totals{border-top:1px solid var(--line);padding:13px 20px;background:#F7F8F6}
+  .totals div{display:flex;justify-content:space-between;font-size:.85rem;padding:3px 0}
+  .totals .big{font-size:1.02rem;font-weight:600;padding-top:6px}
+
+  .daystrip{display:flex;justify-content:space-between;align-items:center;
+    padding:11px 20px;background:#F3F4F1;border-bottom:1px solid var(--line)}
+  .daystrip .d{font-size:.85rem;font-weight:500}
+  .daystrip .d small{display:block;font-weight:400;color:var(--muted);font-size:.74rem;margin-top:1px}
+  .note{margin-top:20px;font-size:.83rem;color:var(--muted);line-height:1.6}
+  .note b{color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="intro">
+    <h1>Purchase entry, without the grid</h1>
+    <p>Working mockup using the real formulas from the template. Volume in water is the water displaced, so it is small &mdash; try 42.60 and 2.66. Key a purchase, then switch to Transactions to see the day build up. The dense grid is still there under Sheet view, for checking against the spreadsheet.</p>
+  </div>
+
+  <div class="device">
+    <div class="bar">
+      <strong>Obuasi desk</strong>
+      <span>Price GH&#162;9,500 per pound &middot; AM window</span>
+    </div>
+
+    <div class="daystrip">
+      <span class="d" id="dlabel">Today<small id="dsub">&nbsp;</small></span>
+      <span id="dstate"></span>
+    </div>
+
+    <div class="switch" role="tablist">
+      <button role="tab" id="tab-entry" aria-selected="true">Entry</button>
+      <button role="tab" id="tab-txns" aria-selected="false">Transactions <span id="count"></span></button>
+    </div>
+
+    <!-- ENTRY -->
+    <section id="view-entry">
+      <div id="entrylive">
+      <div class="readout">
+        <div class="label">Amount payable</div>
+        <div class="amount"><small>GH¢</small><span id="amt">0</span></div>
+        <div class="chips" id="chips"><span class="chip brass">Enter both weights to price this lot</span></div>
+      </div>
+
+      <div class="fields">
+        <div class="row on" data-k="gross">
+          <span class="name">Gross weight<span class="hint">On the scale, in air</span></span>
+          <span class="val" id="v-gross">0.00<em>g</em></span>
+        </div>
+        <div class="row" data-k="water">
+          <span class="name">Volume in water<span class="hint">Water displaced</span></span>
+          <span class="val" id="v-water">0.00<em>cm&#179;</em></span>
+        </div>
+        <div class="row" data-k="price">
+          <span class="name">Price per pound<span class="hint">23K basis, today's window</span></span>
+          <span class="val" id="v-price">9,500<em>GH¢</em></span>
+        </div>
+        <div class="row" data-k="paid">
+          <span class="name">Paid now<span class="hint">Cash handed over</span></span>
+          <span class="val" id="v-paid">0<em>GH¢</em></span>
+        </div>
+      </div>
+
+      <div class="pad" id="pad">
+        <button>1</button><button>2</button><button>3</button>
+        <button>4</button><button>5</button><button>6</button>
+        <button>7</button><button>8</button><button>9</button>
+        <button>.</button><button>0</button><button data-act="del">&#8592;</button>
+        <button class="go" data-act="save" disabled>Record purchase</button>
+      </div>
+      </div>
+    </section>
+
+    <!-- TRANSACTIONS -->
+    <section id="view-txns" hidden>
+      <div class="subswitch" role="tablist">
+        <button role="tab" id="sub-cards" aria-selected="true">Cards</button>
+        <button role="tab" id="sub-sheet" aria-selected="false">Sheet view</button>
+      </div>
+      <div class="list" id="list">
+        <p class="empty" id="emptymsg">No purchases yet today. Record one on the Entry tab and it lands here, newest first. Tap any card to open the full working.</p>
+      </div>
+      <div id="sheet" hidden>
+        <p class="sheetnote">Their spreadsheet layout, same data. Useful for checking line by line during the parallel run.</p>
+        <div class="scroller">
+          <table>
+            <thead><tr><th>Seller</th><th>Gross</th><th>Volume</th><th>Density</th><th>Carat</th>
+            <th>Purity</th><th>Net wt</th><th>Pound</th><th>Amount</th><th>Paid</th><th>Balance</th></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="totals">
+      <div><span>Gross weight</span><span id="t-gross">0.00 g</span></div>
+      <div><span>Volume in water</span><span id="t-water">0.00 cm&#179;</span></div>
+      <div><span>Net weight</span><span id="t-net">0.00 g</span></div>
+      <div><span>Pounds</span><span id="t-lb">0.000</span></div>
+      <div><span>Cash paid out</span><span id="t-paid">GH&#162;0</span></div>
+      <div class="big"><span>Owed to sellers</span><span id="t-owed">GH&#162;0</span></div>
+    </div>
+  </div>
+
+  <p class="note"><b>What it proves.</b> Same density, karat, pound and cedi formulas as the sheet, so totals tie out. One field at a time, so entry beats tabbing across eleven columns. Balances carry across days, which the sheet cannot do. <b>Try:</b> gross 42.60, water 2.66, paid 35000.</p>
+
+</div>
+
+<script>
+(function(){
+  var POUND=7.75, BASIS=23, AG=10.51, K=52.838;
+  var NAMES=['Kwesi Amankwah','Abena Owusu','Yaw Darko','Fuseini Alhassan','Adjoa Nyarko','Kojo Boateng'];
+  var f={gross:'',water:'',price:'9500',paid:''}, active='gross', open=-1;
+  var day=0, days={};
+
+  function make(name,g,w,p,paid){
+    var d=g/w, c=(d-AG)*K/d, pu=c/24;
+    return {name:name,gross:g,water:w,density:d,carat:c,purity:pu,net:pu*g,
+            pounds:g/POUND,amount:(p/BASIS)*c*(g/POUND),paid:paid};
+  }
+  days[0]=[];
+  function cur(){ return days[day] || (days[day]=[]); }
+
+  function dateFor(off){ var d=new Date(2026,8,8); d.setDate(d.getDate()+off); return d; }
+  function dateLabel(off){
+    return dateFor(off).toLocaleDateString('en-GB',
+      {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+  var el=function(i){return document.getElementById(i)};
+  var fmt=function(n,d){return n.toLocaleString('en-GH',{minimumFractionDigits:d,maximumFractionDigits:d})};
+
+  function calc(){
+    var g=parseFloat(f.gross)||0, w=parseFloat(f.water)||0, p=parseFloat(f.price)||0;
+    if(!g||!w||w>=g) return null;
+    var density=g/w, carat=(density-AG)*K/density;
+    if(density<11||density>19.4||carat<=0||carat>24) return {bad:true,density:density};
+    var purity=carat/24;
+    return {density:density,carat:carat,purity:purity,net:purity*g,
+            pounds:g/POUND,amount:(p/BASIS)*carat*(g/POUND)};
+  }
+
+  function renderEntry(){
+    ['gross','water','price','paid'].forEach(function(k){
+      var raw=f[k], show;
+      if(k==='gross'||k==='water') show = raw===''?'0.00':raw;
+      else show = raw===''?'0':fmt(parseFloat(raw)||0,0);
+      el('v-'+k).firstChild.nodeValue=show;
+    });
+    document.querySelectorAll('.row').forEach(function(r){r.classList.toggle('on',r.dataset.k===active)});
+    var c=calc(), chips=el('chips');
+    if(!c){ el('amt').textContent='0'; chips.innerHTML='<span class="chip brass">Enter both weights to price this lot</span>'; }
+    else if(c.bad){ el('amt').textContent='0';
+      chips.innerHTML='<span class="chip warn">Density '+c.density.toFixed(2)+' is outside the range for gold &mdash; water weight is the weight <em>lost</em> in water, not the submerged weight</span>'; }
+    else{
+      el('amt').textContent=fmt(c.amount,0);
+      var paid=parseFloat(f.paid)||0, bal=paid-c.amount;
+      var h='<span class="chip">Density '+c.density.toFixed(2)+'</span>'
+        +'<span class="chip">'+c.carat.toFixed(1)+' carat</span>'
+        +'<span class="chip">'+(c.purity*100).toFixed(1)+'% pure</span>'
+        +'<span class="chip brass">Net wt '+c.net.toFixed(2)+' g</span>'
+        +'<span class="chip brass">'+c.pounds.toFixed(3)+' lb</span>';
+      if(paid>0&&bal<-0.5) h+='<span class="chip warn">GH&#162;'+fmt(Math.abs(bal),0)+' still owed</span>';
+      chips.innerHTML=h;
+    }
+    document.querySelector('.go').disabled = !(c&&!c.bad);
+  }
+
+  function renderTxns(){
+    var txns=cur(); var list=el('list');
+    el('count').textContent = txns.length? '('+txns.length+')' : '';
+    if(txns.length){
+      list.innerHTML = txns.map(function(t,i){return {t:t,i:i}}).reverse().map(function(o){
+        var t=o.t, bal=t.paid-t.amount;
+        var owed = bal<-0.5? '<span class="owed"> &middot; GH&#162;'+fmt(Math.abs(bal),0)+' owed</span>':'';
+        var d='';
+        if(open===o.i){
+          d='<div class="detail">'
+           +'<span class="m">Volume<b>'+t.water.toFixed(2)+' cm\u00b3</b></span>'
+           +'<span class="m">Density<b>'+t.density.toFixed(3)+'</b></span>'
+           +'<span class="m">Carat<b>'+t.carat.toFixed(2)+'</b></span>'
+           +'<span class="m">Purity<b>'+(t.purity*100).toFixed(1)+'%</b></span>'
+           +'<span class="m">Pounds<b>'+t.pounds.toFixed(3)+'</b></span>'
+           +'<span class="m">Net weight<b>'+t.net.toFixed(2)+' g</b></span>'
+           +'<span class="m">Paid<b>GH&#162;'+fmt(t.paid,0)+'</b></span>'
+           +'</div>';
+        }
+        return '<div class="txn" data-i="'+o.i+'"><div class="top"><span class="who">'+t.name+'</span>'
+          +'<span class="amt">GH&#162;'+fmt(t.amount,0)+'</span></div>'
+          +'<div class="sub">'+t.gross.toFixed(2)+' g at '+t.carat.toFixed(1)+'K &middot; '
+          +t.net.toFixed(2)+' g fine'+owed+'</div>'+d+'</div>';
+      }).join('');
+    } else {
+      list.innerHTML = '<p class="empty">'+(day===0
+        ? 'No purchases yet today. Record one on the Entry tab and it lands here, newest first. Tap any card to open the full working.'
+        : 'Nothing was recorded on this day.')+'</p>';
+    }
+    el('tbody').innerHTML = txns.map(function(t){
+      var bal=t.paid-t.amount;
+      return '<tr><td>'+t.name+'</td><td>'+t.gross.toFixed(2)+'</td><td>'+t.water.toFixed(2)+'</td>'
+        +'<td>'+t.density.toFixed(3)+'</td><td>'+t.carat.toFixed(2)+'</td>'
+        +'<td>'+(t.purity*100).toFixed(1)+'</td><td>'+t.net.toFixed(2)+'</td>'
+        +'<td>'+t.pounds.toFixed(3)+'</td><td>'+fmt(t.amount,0)+'</td><td>'+fmt(t.paid,0)+'</td>'
+        +'<td'+(bal<-0.5?' class="owed"':'')+'>'+fmt(bal,0)+'</td></tr>';
+    }).join('');
+
+    var gross=0,water=0,net=0,lb=0,paid=0,owed=0;
+    txns.forEach(function(t){gross+=t.gross;water+=t.water;net+=t.net;lb+=t.pounds;paid+=t.paid;
+      var b=t.paid-t.amount;if(b<0)owed+=-b});
+    el('t-gross').textContent=gross.toFixed(2)+' g';
+    el('t-water').textContent=water.toFixed(2)+' cm\u00b3';
+    el('t-net').textContent=net.toFixed(2)+' g';
+    el('t-lb').textContent=lb.toFixed(3);
+    el('t-paid').textContent='GH\u00A2'+fmt(paid,0);
+    el('t-owed').textContent='GH\u00A2'+fmt(owed,0);
+  }
+
+  function renderDay(){
+    var today = day===0;
+    el('dlabel').firstChild.nodeValue = today? 'Today' : dateFor(day).toLocaleDateString('en-GB',
+      {weekday:'short',day:'numeric',month:'short'});
+    el('dsub').textContent = dateLabel(day);
+    el('dstate').innerHTML = today? '' : '<span class="badge">Closed</span>';
+    renderTxns();
+  }
+
+  function show(view){
+    var e = view==='entry';
+    el('view-entry').hidden=!e; el('view-txns').hidden=e;
+    el('tab-entry').setAttribute('aria-selected',e); el('tab-txns').setAttribute('aria-selected',!e);
+  }
+  function showSub(cards){
+    el('list').hidden=!cards; el('sheet').hidden=cards;
+    el('sub-cards').setAttribute('aria-selected',cards); el('sub-sheet').setAttribute('aria-selected',!cards);
+  }
+
+  el('tab-entry').onclick=function(){show('entry')};
+  el('tab-txns').onclick=function(){show('txns')};
+  el('sub-cards').onclick=function(){showSub(true)};
+  el('sub-sheet').onclick=function(){showSub(false)};
+
+  document.querySelectorAll('.row').forEach(function(r){
+    r.addEventListener('click',function(){active=r.dataset.k;renderEntry()});
+  });
+
+  el('list').addEventListener('click',function(e){
+    var c=e.target.closest('.txn'); if(!c) return;
+    var i=+c.dataset.i; open = (open===i? -1 : i); renderTxns();
+  });
+
+  el('pad').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var act=b.dataset.act;
+    if(act==='del'){ f[active]=f[active].slice(0,-1); }
+    else if(act==='save'){
+      var c=calc(); if(!c||c.bad) return;
+      var txns=cur();
+      txns.push({name:NAMES[txns.length%NAMES.length],gross:parseFloat(f.gross),water:parseFloat(f.water),
+        density:c.density,carat:c.carat,purity:c.purity,net:c.net,pounds:c.pounds,
+        amount:c.amount,paid:parseFloat(f.paid)||0});
+      f.gross='';f.water='';f.paid='';active='gross';
+      renderTxns(); show('txns');
+    } else {
+      var ch=b.textContent;
+      if(ch==='.'&&f[active].indexOf('.')>-1) return;
+      f[active]=f[active]+ch;
+    }
+    renderEntry();
+  });
+
+  renderEntry(); renderDay();
+})();
+</script>
+</body>
+</html>
